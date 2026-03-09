@@ -1,0 +1,94 @@
+Want to do a PhD with GPT-Lab?
+Here is a pre-task for you
+Advanced RAG System for University Curriculum Exploration
+Time budget
+
+6 hours
+
+Deliverable
+
+Git repository, working prototype, and curated README
+
+Background
+Companies constantly ask Tampere University to teach students skills relevant to their
+domain. However, they do not know we already do! For example, companies in Seinäjoki
+working on embedded systems for mobile heavy machinery care about real-time systems,
+standards compliance, and embedded software engineering in regulated domains. We have
+such a degree program.
+The problem is, the university’s curriculum browser is not really an attractive interface for
+them. It is full of university administrative detail and study-structure jargon, and the search is
+outdated paradigm (who has the time for that!). A company representative looking for an
+answer to a question “What does Tampere teach about standards compliance in software
+engineering?” should not have to try to guess search keywords, navigate module hierarchies
+and try to find information if there are any students in the listed degree programs by
+browsing through Trepo MSc thesis archives.
+
+Your Task
+Build an advanced RAG system and a chat-based interface that lets a company
+representative explore Tampere University’s curriculum using natural language. The system
+should build a mirror of the data using the Sisu Kori API, alternative data sources, and
+deploy a LLM to improve RAG system performance, interpret queries, and synthesize
+answers.
+Example queries:
+•
+•
+•
+•
+•
+
+“What courses does Tampere offer related to functional safety and IEC 61508?”
+“Show me the embedded systems core courses and what would a student that has
+completed those actually know?”
+“Which study modules cover software testing for safety-critical applications?”
+“How many students there are studying Industry 4.0 topics?”
+“Who of the Tampere University staff to contact to find a student who knows
+operations research to do a MSc thesis with us?”
+
+Data Source
+The Sisu Kori API is public and requires no authentication. The Swagger UI is at:
+sisu.tuni.fi/kori/swagger-ui
+Figuring out the API structure, the relevant endpoints, and the data model is part of the task.
+In case you are rate limited or get blocked, do not worry. Just rely (and store) partial data or
+generate synthetic entries if necessary. Any data access challenges can be resolved later.
+
+Requirements
+Must have
+•
+•
+
+•
+•
+
+Live data mirroring and caching from the Kori API.
+RAG system that uses advanced techniques such as generative query expansion to
+allow good accuracy. Document what you used and prove it improves results over
+naïve RAG.
+An LLM that interprets the query, decides what data to fetch, answers the query, and
+does not hallucinate that much.
+Answers that reference specific courses and modules by code and name.
+
+Beyond that, surprise us
+Pick what interests you. E.g., an extension where you only need to tell the system what is
+your role is and your company, and the system will find out what kind of course content and
+students would be able to solve your problems.
+
+What We Will Evaluate
+There is no single correct architecture. We are interested in how you approach such an
+open-ended problem:
+1. Problem decomposition
+2. Technical judgement: what did you choose, what did you reject, and why?
+3. Code quality (we assume this will be AI generated, but good prompting can be seen
+from the code).
+4. Self-direction: did you identify and solve problems we didn’t spell out?
+5. Communication: can you explain what you built and why?
+We do not expect a production system. A well-reasoned prototype that demonstrates your
+thinking is what we’re looking for.
+
+Submission
+Send a Git repository link or archive containing your code, a README explaining your
+approach and setup instructions, any notes on what you would improve given more time,
+and a short video where the system operates. Manage your time wisely.
+
+Good luck.
+
+

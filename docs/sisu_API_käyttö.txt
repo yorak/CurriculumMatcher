@@ -1,0 +1,52 @@
+
+Sisun API:n käytöstä
+
+Sisun dataan pääsee käsiksi verkossa mm. ns. Kori API:n kautta. Kori API:n tekninen dokumentaatio on tarjolla sivulla https://sis-tuni.funidata.fi/kori/swagger-ui/index.html?configUrl=/kori/v3/api-docs/swagger-config&filter=true. API palauttaa dataa JSON-muodossa.
+
+Harjoitustyön kannalta oleellinen tieto on, että listan yliopistomme tutkintorakenteista saa suorittamalla www-pyynnön https://sis-tuni.funidata.fi/kori/api/module-search?curriculumPeriodId=uta-lvv-2021&universityId=tuni-university-root-id&moduleType=DegreeProgramme&limit=1000.
+
+Tutkintojen rakenteet on kuvattu Sisussa käyttäen suunnilleen seuraavanlaista tyyppihierarkiaa:
+
+    Abstrakti kattotyyppi Module.
+
+        Omaa konkreettiset alityypit Education, DegreeProgramme, StudyModule ja GroupingModule, jotka kuvaavat koulutuksen ja tutkintorakenteen osia.
+
+            Harjoitustyön puitteissa emme tarvitse Education-tyyppisiä moduleita, joten kyseistä tyyppiä ei esitellä tarkemmin.
+
+        Sisun API tarjoaa päätepisteitä modulien hakuun esim. id:n tai groupId:n perusteella.
+
+            Tietyn id:n omaavan modulin (tässä esim. id on “otm-1d25ee85-df98-4c03-b4ff-6cad7b09618b”) tarkemmat tiedot saa seuraavanlaisella pyynnöllä: https://sis-tuni.funidata.fi/kori/api/modules/otm-1d25ee85-df98-4c03-b4ff-6cad7b09618b
+
+            Tietyn groupId:n omaavan modulin (tässä esim. groupId on “uta-ok-ykoodi-41176”) tarkemmat tiedot saa seuraavanlaisella pyynnöllä: https://sis-tuni.funidata.fi/kori/api/modules/by-group-id?groupId=uta-ok-ykoodi-41176&universityId=tuni-university-root-id
+
+            Sisu palauttaa modulit JSON-muodossa, ja kukin moduli sisältää attribuutin type, joka kertoo kyseisen modulin konkreettisen tyypin (jokin yllämainituista alityypeistä).
+
+    DegreeProgramme.
+
+        Tutkintorakenteen juuritaso, joka kertoo tutkinnon nimen, laajuuden opintopisteinä jne.
+
+    StudyModule.
+
+        Opintokokonaisuus, jonka alaisuudessa on yleensä useita kursseja tai alimoduleita.
+
+        Opintokokonaisuudesta voi saada suoritusmerkinnän opintorekisteriin, ja sen yhteydessä on tietoa esim. opintokokonaisuuden laajuudesta opintopisteinä, arvostelukriteereistä sekä vastuuhenkilöistä.
+
+    GroupingModule.
+
+        “Tekninen apuväline” kuvaamaan tutkintorakenteen hierarkian välitasoa, jonka alaisuudessa on yleensä useita kursseja tai alimoduleita mutta joka ei kuitenkaan ole varsinainen opintokokonaisuus.
+
+        Eroaa opintokokonaisuudesta lähinnä siinä, että tästä ei voi saada erillistä suoritusmerkintää, eikä tämän yhteydessä siten ole tietoa esim. opintopisteistä, yms.
+
+    CourseUnit.
+
+        Kuvaa opintojakson: esim. koodi, nimi, laajuus opintopisteinä, kurssin kuvaus, jne.
+
+        Tämä ei Sisussa ole Module:n alityyppi, ja kurssitietoja haetaankin Sisusta API:sta eri päätepisteiden kautta kuin moduleita. Kurssejakin voi hakea esim. id:n tai groupId:n perusteella.
+
+        Tietyn groupId:n omaavan kurssin (tässä esim. groupId on “uta-ykoodi-47926”) tarkemmat tiedot saa seuraavanlaisella pyynnöllä: https://sis-tuni.funidata.fi/kori/api/course-units/by-group-id?groupId=uta-ykoodi-47926&universityId=tuni-university-root-id
+
+        Modulit, joiden alaisuudessa on suoraan kursseja, viittaavat kursseihin niiden groupId:n avulla.
+
+Tutkintorakenne koostuu puumaisesta modulihierarkiasta. Kukin moduli, modulin tyypistä riippumatta, sisältää attribuutin rule, joka kuvaa kyseisen modulin alimodulit (= sen lapset puurakenteessa). Tutkintorakenteen voi siten käydä läpi / prosessoida aloittamalla sen juuritasolta eli sen DegreeProgramme-modulista, ja käymällä rekursiivisesti läpi kunkin kohdatun modulin rule-attribuutin kuvaamat alimodulit. Kunkin yksittäisen konkreettisen rule:n kohdalla on ilmaistu sen tyyppi. Esim. CourseUnitRule ja ModuleRule kuvaavat tiettyjä suoraan modulin alaisuuteen kuuluvia kursseja tai moduleita. Sen sijaan AnyCourseUnitRule ja AnyModuleRule ilmaisevat, että kyseisen modulin alaisuuteen saa lisätä mitä vain kursseja tai moduleita.
+
+Edellämainittujen tyyppien tekniset kuvaukset löytyvät aiemmin jo mainitun Sisun Kori API:n dokumentaatiosivun https://sis-tuni.funidata.fi/kori/swagger-ui/index.html?configUrl=/kori/v3/api-docs/swagger-config&filter=true alaosasta.
